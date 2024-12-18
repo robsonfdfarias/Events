@@ -1,0 +1,23 @@
+
+* {
+    font-family: 'Roboto';
+}
+.footer {
+    position:absolute;
+    left: 0;
+    bottom: 0;
+    padding: 30px;
+    display:flex;
+    justify-content: center;
+    justify-items: center;
+    background-color: rgb(166, 166, 166);
+    width: calc(100% - 0px);
+}
+
+#navbar img {
+    width: 40px;
+}
+
+#navbar {
+    justify-content: space-between;
+}
