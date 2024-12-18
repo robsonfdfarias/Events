@@ -1,1 +1,3 @@
-console.log('modificado....')
+function closeMsg(obj){
+    obj.parentNode.remove();
+}

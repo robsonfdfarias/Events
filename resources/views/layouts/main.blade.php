@@ -57,8 +57,34 @@
                 </div>
             </nav>
         </header>
-        @yield("content")
-        <br><br><br><br><br><br>
+        <main>
+            <div class="container-fluid">
+                <div class="row">
+                    @if(session('res'))
+                    @php
+                        if(session('res')>0){
+                            $class = 'msg-sucess';
+                            $msg = 'Evento cadastrado com sucesso!';
+                        }else{
+                            $class = 'msg-fail';
+                            $msg = 'Erro ao cadastrar o evento!';
+                        }
+                    @endphp
+                        <div class="{{$class}}">
+                            {{$msg}}
+                            <span class="close-msg" onclick="closeMsg(this)">X</span>
+                        </div>
+                    @endif
+                    <!-- @if(session('status'))
+                        <div class="msg-sucess">{{ session('msg') }} <span class="close-msg" onclick="closeMsg(this)">X</span></div>
+                    @else
+                        <div class="msg-fail">{{ session('msg') }} <span class="close-msg" onclick="closeMsg(this)">X</span></div>
+                    @endif -->
+                    @yield("content")
+                </div>
+            </div>
+        </main>
+        <!-- <br><br><br><br><br><br> -->
         <footer class="footer">
             <p>Events &copy; 2024</p>
         </footer>
