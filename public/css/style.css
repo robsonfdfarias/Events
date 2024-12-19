@@ -66,10 +66,36 @@ header {
     color: #F2A340;
     margin-bottom: 30px;
     font-weight: 900;
+    text-shadow: 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black;
+    text-decoration: underline;
 }
 #search-container form {
     width: 50%;
     margin: 0 auto;
+}
+@media (max-width:700px) {
+    #search-container form {
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+.rad{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.rad2{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex;
+    align-items: center;
+}
+.rad2 span{
+    margin-left: 5px;
+}
+.rad2 ion-icon{
+    font-size:25px;
 }
 
 /* Events list */
@@ -93,6 +119,7 @@ header {
 #events-container .card{
     flex: 1 1 24%;
     max-width: 25%;
+    min-width: 220px;
     border-radius: 10px;
     padding: 0;
     margin: .5%;
@@ -162,6 +189,7 @@ header {
     margin: 0;
     font-size: 14px;
     display: flex;
+    margin-bottom: 5px;
 }
 
 #info-container h3,
@@ -174,7 +202,7 @@ header {
     margin: 20px 0;
 }
 
-#info-container ion-icon {
+#info-container ion-icon, i {
     font-size: 20px;
     color: #F2A340;
     margin-right: 5px;
@@ -191,6 +219,32 @@ header {
 
 #items-list li{
     display: flex;
+}
+
+/* Dashboard */
+.dashboard-title-container{
+    margin: 30px 0;
+}
+
+.dashboard-title-container th{
+    width: 25%;
+}
+
+.tdActions {
+    display: flex;
+}
+.tdActions a, .tdActions i{
+    color: #fff;
+}
+.tdActions a, button{
+    margin-left: 5px;
+}
+.color-text{
+    color: #fff;
+}
+
+.color-text:hover, .color-text:hover i{
+    color: #C28008;
 }
 
 

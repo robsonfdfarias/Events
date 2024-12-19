@@ -4,13 +4,21 @@
 @section("content")
     <div id="search-container" class="col-md-12">
         <h1>Busque um evento</h1>
-        <form action="">
-            <input type="text" name="search" id="search" class="form-control" placeholder="Digite sua pesquisa">
+        <form action="/" method="GET" style="display:flex;">
+            <input type="text" name="search" id="search" class="form-control rad" placeholder="Digite sua pesquisa">
+            <!-- <input type="submit" value="Pesquisar" class="btn btn-primary rad2" alt="Pesquisar"> -->
+            <button class="btn btn-primary rad2" alt="Pesquisar">
+                <i class="fa-solid fa-magnifying-glass" style="color:white"></i>
+             <span>Pesquisar</span></button>
         </form>
     </div>
     <div id="events-container" class="col-md-12">
-        <h2>Próximos eventos</h2>
-        <p class="subtitle">Veja os eventos dos próximos dias</p>
+        @if($search)
+            <h2>Você pesquisou por: <span style="color:#F2A340;">{{ $search }}</span></h2>
+        @else
+            <h2>Próximos eventos</h2>
+            <p class="subtitle">Veja os eventos dos próximos dias</p>
+        @endif
         <div id="cards-container" class="row">
             @foreach($events as $event)
                 <div class="card col-md-3">

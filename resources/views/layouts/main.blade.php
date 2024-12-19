@@ -16,6 +16,10 @@
 
         <!-- Icons -->
         <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <!-- <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script> -->
+
+
 
         <!-- CSS Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -47,12 +51,31 @@
                         <li class="nav-item">
                             <a href="/events/create" class="nav-link">Criar eventos</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="/" class="nav-link">Entrar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/" class="nav-link">Cadastrar</a>
-                        </li>
+                        @auth
+                            <li class="nav-item">
+                                <a href="/dashboard" class="nav-link">Meus Eventos</a>
+                            </li>
+                            <li class="nav-item">
+                                <form action="/logout" method="POST">
+                                    @csrf
+                                    <a href="/logout"
+                                        class="nav-link"
+                                        onclick="event.preventDefault();
+                                                this.closest('form').submit();"
+                                    >
+                                        Sair
+                                    </a>
+                                </form>
+                            </li>
+                        @endauth
+                        @guest
+                            <li class="nav-item">
+                                <a href="/login" class="nav-link">Entrar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/register" class="nav-link">Cadastrar</a>
+                            </li>
+                        @endguest
                     </ul>
                 </div>
             </nav>
@@ -64,14 +87,12 @@
                     @php
                         if(session('res')>0){
                             $class = 'msg-sucess';
-                            $msg = 'Evento cadastrado com sucesso!';
                         }else{
                             $class = 'msg-fail';
-                            $msg = 'Erro ao cadastrar o evento!';
                         }
                     @endphp
                         <div class="{{$class}}">
-                            {{$msg}}
+                            {{ session('msg') }}
                             <span class="close-msg" onclick="closeMsg(this)">X</span>
                         </div>
                     @endif

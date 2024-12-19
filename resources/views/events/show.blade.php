@@ -9,14 +9,30 @@
             </div>
             <div id="info-container" class="col-md-6">
                 <h1>{{ $event->title }}</h1>
-                <p class="events-city"><ion-icon name="location-outline"></ion-icon> {{ $event->city }}</p>
-                <p class="events-participants"><ion-icon name="people-outline"></ion-icon> X participantes</p>
-                <p class="events-owner"><ion-icon name="star-outline"></ion-icon> Dono do evento</p>
+                <p class="events-city">
+                    <!-- <ion-icon name="location-outline"></ion-icon> -->
+                    <i class="fa-solid fa-map-location-dot"></i>
+                     {{ $event->city }}
+                </p>
+                <p class="events-participants">
+                    <!-- <ion-icon name="people-outline"></ion-icon> -->
+                    <i class="fa-solid fa-users"></i>
+                     X participantes
+                </p>
+                <p class="events-owner">
+                    <!-- <ion-icon name="star-outline"></ion-icon> -->
+                    <i class="fa-solid fa-star"></i>
+                     {{ $eventOwner['name'] }}
+                </p>
                 <a href="#" class="btn btn-primary" id="event-submit">Confirmar Presença</a>
                 <h3>O evento conta com:</h3>
                 <ul id="items-list">
                     @foreach($event->items as $item)
-                    <li><ion-icon name="play-outline"></ion-icon> <span>{{ $item }}</span></li>
+                    <li>
+                        <!-- <ion-icon name="play-outline"></ion-icon> -->
+                        <i class="fa-regular fa-square-check"></i>
+                         <span>{{ $item }}</span>
+                    </li>
                     @endforeach
                 </ul>
             </div>
