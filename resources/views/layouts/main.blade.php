@@ -83,7 +83,7 @@
         <main>
             <div class="container-fluid">
                 <div class="row">
-                    @if(session('res'))
+                    @if(session('status')=='ok')
                     @php
                         if(session('res')>0){
                             $class = 'msg-sucess';

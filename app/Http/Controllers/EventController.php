@@ -55,6 +55,7 @@ class EventController extends Controller
         }
 
         return redirect('/')->with([
+            'status'=>true,
             'res'=>$result,
             'msg'=>$msg
         ]);
@@ -91,12 +92,14 @@ class EventController extends Controller
         $user = auth()->user();
         if($event->user_id != $user->id){
             return redirect('/dashboard')->with([
+                'status'=>true,
                 'msg'=>'Você não é o dono do evento '.$event->title.'. Sua tentativa de deletar foi registrada.',
-                'res'=>1
+                'res'=>0
             ]);
         }
         $res = Event::findOrFail($id)->delete();
         return redirect('/dashboard')->with([
+            'status'=>true,
             'msg'=>'Evento excluído com sucesso!',
             'res'=>$res
         ]);
@@ -107,6 +110,7 @@ class EventController extends Controller
         $user = auth()->user();
         if($event->user_id != $user->id){
             return redirect('/dashboard')->with([
+                'status'=>true,
                 'msg'=>'Você não é o dono do evento '.$event->title,
                 'res'=>1
             ]);
@@ -126,6 +130,7 @@ class EventController extends Controller
         }
         $res = Event::findOrFail($request->id)->update($data);
         return redirect('/dashboard')->with([
+            'status'=>true,
             'msg'=>'Evento Editado com sucesso!',
             'res'=>$res
         ]);
@@ -136,6 +141,7 @@ class EventController extends Controller
         $res = $user->eventAsParticipant()->attach($id);
         $event = Event::findOrFail($id);
         return redirect('/dashboard')->with([
+            'status'=>true,
             'msg'=>'Sua presença está confirmada no evento '.$event->title,
             'res'=>$res
         ]);
@@ -146,6 +152,7 @@ class EventController extends Controller
         $res = $user->eventAsParticipant()->detach($id);
         $event = Event::findOrFail($id);
         return redirect('/dashboard')->with([
+            'status'=>true,
             'msg'=>'Você removeu sua inscrição do Evento '.$event->title.'. Você ainda pode se inscrever novamente.',
             'res'=>$res
         ]);
