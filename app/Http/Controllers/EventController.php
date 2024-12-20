@@ -97,6 +97,13 @@ class EventController extends Controller
                 'res'=>0
             ]);
         }
+        //Verifica se a imagem existe
+        if(file_exists('img/events/'.$event->image)){
+            //verifica se foi possível apagar a imagem
+            if(unlink('img/events/'.$event->image)){
+                //Imagem deletada com sucesso
+            }
+        }
         $res = Event::findOrFail($id)->delete();
         return redirect('/dashboard')->with([
             'status'=>true,
@@ -138,8 +145,22 @@ class EventController extends Controller
 
     public function joinEvent($id){
         $user = auth()->user();
-        $res = $user->eventAsParticipant()->attach($id);
         $event = Event::findOrFail($id);
+        $registrations = $event->users;
+        foreach($registrations as $enrollment){
+            //Verifica se o usuário está inscrito no evento, se estiver,
+            //redireciona o mesmo para o dashboard avisando que ele já estava inscrito
+            if($enrollment->id == $user->id){
+                return redirect('/dashboard')->with([
+                    'status'=>true,
+                    'msg'=>'Você já está inscrito no evento '.$event->title,
+                    'res'=>0
+                ]);
+                break;
+            }
+        }
+        //Registra a participação do usuário no evento
+        $res = $user->eventAsParticipant()->attach($id);
         return redirect('/dashboard')->with([
             'status'=>true,
             'msg'=>'Sua presença está confirmada no evento '.$event->title,
@@ -149,8 +170,25 @@ class EventController extends Controller
 
     public function leaveEvent($id){
         $user = auth()->user();
-        $res = $user->eventAsParticipant()->detach($id);
         $event = Event::findOrFail($id);
+        $registrations = $event->users;
+        $registered = false;
+        foreach($registrations as $enrollment){
+            //Testa para saber se o usuário está inscrito no evento
+            if($enrollment->id == $user->id){
+                $registered = true;
+            }
+        }
+        //Verifica se ele não está inscrito, se não estiver, ele redireciona informando que ele não está inscrito para sair.
+        if(!$registered){
+            return redirect('/dashboard')->with([
+                'status'=>true,
+                'msg'=>'Você já não está inscrito no evento '.$event->title,
+                'res'=>0
+            ]);
+        }
+        //Remove a inscrição do usuário no evento
+        $res = $user->eventAsParticipant()->detach($id);
         return redirect('/dashboard')->with([
             'status'=>true,
             'msg'=>'Você removeu sua inscrição do Evento '.$event->title.'. Você ainda pode se inscrever novamente.',
