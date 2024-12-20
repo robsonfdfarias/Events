@@ -65,16 +65,36 @@ class EventController extends Controller
         $eventOwner = User::where([
             ['id', $event->user_id]
         ])->first()->toArray();
-        return view('events.show', ['event'=>$event, 'eventOwner'=>$eventOwner]);
+        $currentUser = auth()->user();
+        $registered = false;
+        $users = $event->users;
+        foreach($users as $user){
+            if($user->id == $currentUser->id){
+                $registered = true;
+            }
+        }
+        return view('events.show', ['event'=>$event, 'eventOwner'=>$eventOwner, 'registered'=>$registered]);
     }
 
     public function dashboard(){
         $user = auth()->user();
         $events = $user->events;
-        return view('events.dashboard', ['events'=>$events]);
+        $eventAsParticipant = $user->eventAsParticipant;
+        return view('events.dashboard', [
+            'events'=>$events,
+            'eventsAsParticipant'=>$eventAsParticipant
+        ]);
     }
 
     public function destroy($id){
+        $event = Event::findOrFail($id);
+        $user = auth()->user();
+        if($event->user_id != $user->id){
+            return redirect('/dashboard')->with([
+                'msg'=>'Você não é o dono do evento '.$event->title.'. Sua tentativa de deletar foi registrada.',
+                'res'=>1
+            ]);
+        }
         $res = Event::findOrFail($id)->delete();
         return redirect('/dashboard')->with([
             'msg'=>'Evento excluído com sucesso!',
@@ -84,6 +104,13 @@ class EventController extends Controller
 
     public function edit($id){
         $event = Event::findOrFail($id);
+        $user = auth()->user();
+        if($event->user_id != $user->id){
+            return redirect('/dashboard')->with([
+                'msg'=>'Você não é o dono do evento '.$event->title,
+                'res'=>1
+            ]);
+        }
         return view('events.create', ['event'=>$event, 'url'=>'/events/update/'.$id]);
     }
 
@@ -100,6 +127,26 @@ class EventController extends Controller
         $res = Event::findOrFail($request->id)->update($data);
         return redirect('/dashboard')->with([
             'msg'=>'Evento Editado com sucesso!',
+            'res'=>$res
+        ]);
+    }
+
+    public function joinEvent($id){
+        $user = auth()->user();
+        $res = $user->eventAsParticipant()->attach($id);
+        $event = Event::findOrFail($id);
+        return redirect('/dashboard')->with([
+            'msg'=>'Sua presença está confirmada no evento '.$event->title,
+            'res'=>$res
+        ]);
+    }
+
+    public function leaveEvent($id){
+        $user = auth()->user();
+        $res = $user->eventAsParticipant()->detach($id);
+        $event = Event::findOrFail($id);
+        return redirect('/dashboard')->with([
+            'msg'=>'Você removeu sua inscrição do Evento '.$event->title.'. Você ainda pode se inscrever novamente.',
             'res'=>$res
         ]);
     }
