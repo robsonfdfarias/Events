@@ -19,11 +19,19 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Definir o diretório de trabalho
 WORKDIR /var/www
 
+RUN chown -R www-data:www-data /var/www
+RUN chmod -R 775 /var/www
+
+
 # Copiar o código da aplicação Laravel para dentro do container
 COPY . .
 
+RUN git config --global --add safe.directory /var/www
+
 # Instalar dependências do Laravel (usando o Composer)
-RUN composer install --no-dev --optimize-autoloader
+# RUN composer install --no-dev --optimize-autoloader
+RUN rm -rf vendor && composer install --no-dev --optimize-autoloader
+
 
 # Configurar permissões adequadas para as pastas de storage e cache
 RUN chown -R www-data:www-data /var/www && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
